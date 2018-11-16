@@ -57,7 +57,7 @@ public:
     ros::Subscriber<std_msgs::UInt16> *subscriber;
 #endif
 	ZPCA9685 * servo;
-	char index;
+	uint8_t index;
 };
 
 #endif

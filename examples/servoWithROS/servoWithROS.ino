@@ -2,15 +2,18 @@
 // do
 // roscore &
 // for raspberry pi : rosrun rosserial_python serial_node.py /dev/ttyUSB0 &
-// or for windows on COM4 : rosrun rosserial_python serial_node.py /dev/ttyS4 & 
-// rostopic pub servo/A std_msgs/UInt16 0 --once
-//  rostopic pub servo/B std_msgs/UInt16 180 --once
+// or for windows on COM4 : 
+//        sudo chmod 666 /dev/ttyS4 if COM4
+//        rosrun rosserial_python serial_node.py /dev/ttyS4 & 
+// rostopic pub servo/A std_msgs/UInt16 10 --once
+// rostopic pub servo/B std_msgs/UInt16 180 --once
+// rostopic pub servo/A std_msgs/UInt16 180 --once
+// rostopic pub servo/B std_msgs/UInt16 10 --once
 
 
 // NOTE : WINDOWS 10 with ubuntu 16.04 as subsystem, after ros install do this :
 //      sudo apt-get install ros-kinetic-rosserial-windows
 //     sudo apt-get install ros-kinetic-rosserial-server
-// sudo chmod 666 /dev/ttyS4 if COM4
 
 #if defined(ARDUINO) && ARDUINO >= 100
   #include "Arduino.h"

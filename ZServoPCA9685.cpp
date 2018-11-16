@@ -176,7 +176,7 @@ if (myservo[12]!=0)
 static void callbackinstance13( const std_msgs::UInt16& cmd_msg)
 {	
 //DEBUG(nh->loginfo("callbackinstance13()"));
-if (myservo[113]!=0)
+if (myservo[13]!=0)
 	myservo[13]->write(cmd_msg.data); //set servo angle, should be from 0-180   
 }
 static void callbackinstance14( const std_msgs::UInt16& cmd_msg)
@@ -188,7 +188,7 @@ if (myservo[14]!=0)
 static void callbackinstance15( const std_msgs::UInt16& cmd_msg)
 {	
 //DEBUG(nh->loginfo("callbackinstance15()"));
-if (myservo[115]!=0)
+if (myservo[15]!=0)
 	myservo[15]->write(cmd_msg.data); //set servo angle, should be from 0-180   
 }
 
