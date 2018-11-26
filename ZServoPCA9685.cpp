@@ -9,6 +9,8 @@
 
 
 */
+#include <assert.h>
+
 #define DEBUG(a) a
 //#define DEBUG(a) {}
 
@@ -41,9 +43,7 @@ ZServoPCA9685::ZServoPCA9685(ZPCA9685 * myZPCA9685)
 	 DEBUG(nh->loginfo("ZServoPCA9685::attach1()"));  
 	// nh->subscribe(*subscriber);
 	index=pin;
-	#ifdef ROS_USED 
-		myservo[index]=this;	
-	#endif
+
 	 return servo->attach(pin);
  }
  
@@ -52,9 +52,7 @@ ZServoPCA9685::ZServoPCA9685(ZPCA9685 * myZPCA9685)
 DEBUG(nh->loginfo("ZServoPCA9685::attach()"));  
 	//   nh->subscribe(*subscriber);
 	index=pin;
-	#ifdef ROS_USED 
-		myservo[index]=this;	
-	#endif
+
 	   return servo->attach(pin,min,max);
 
   }  
@@ -192,20 +190,28 @@ if (myservo[15]!=0)
 	myservo[15]->write(cmd_msg.data); //set servo angle, should be from 0-180   
 }
 
-void(*callback[ZSERVO_MAX])(const std_msgs::UInt16& cmd_msg)={
+
+static void(*callback[ZSERVO_MAX])(const std_msgs::UInt16& cmd_msg)={
 	callbackinstance0,callbackinstance1,callbackinstance2,callbackinstance3,
 	callbackinstance4,callbackinstance5,callbackinstance6,callbackinstance7,
 	callbackinstance8,callbackinstance9,callbackinstance10,callbackinstance11,
 	callbackinstance12,callbackinstance13,callbackinstance14,callbackinstance15	
 	};
 
+static  int index=0;
 void ZServoPCA9685::setup( ros::NodeHandle * myNodeHandle,	const char   *	topic ,int pin)
 {
+  assert(index<16);
   nh=myNodeHandle;
   attach( pin);
-  subscriber=new ros::Subscriber<std_msgs::UInt16> (topic, callback[pin]); 
+  subscriber=new ros::Subscriber<std_msgs::UInt16> (topic, callback[index]); 
+  myservo[index]=this;	
   nh->subscribe(*subscriber); 
-  DEBUG(nh->loginfo("ZServoPCA9685::setup()"));  
+  DEBUG(nh->loginfo("ZServoPCA9685::setup()"));
+  DEBUG(nh->loginfo(topic));
+ // nh->spinOnce();
+//  delay(100);// delay for usart
+  index++;
 }
 // ROS SECTION :
 //char frameid[] = "/ir_ranger";
