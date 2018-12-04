@@ -11,8 +11,8 @@
 */
 #include <assert.h>
 
-#define DEBUG(a) a
-//#define DEBUG(a) {}
+//#define DEBUG(a) a
+#define DEBUG(a) {}
 
 
 #if defined(ARDUINO) && ARDUINO >= 100
