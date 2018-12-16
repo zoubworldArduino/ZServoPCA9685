@@ -1,18 +1,18 @@
-/*
-	SharpIR
+/** @file ZServoPCA9685.h
+	ZServoPCA9685
 
-	Arduino library for retrieving distance (in cm) from the analog GP2Y0A21Y and GP2Y0A02YK
-
-	From an original version of Dr. Marcal Casas-Cartagena (marcal.casas@gmail.com)     
+	 @par dependency :
+   This library use the folowing ones :    ZPCA9685, PinExtender,Rosserial_Arduino_Library
+   you can find it on https://github.com/zoubworldArduino/
+  
+	Library that manage servo with ros on a board with a PCA9685.
+	This library offer the same API as the arduino library Servo.
 	
-    Version : 1.0 : Guillaume Rico
-
-	https://github.com/guillaume-rico/SharpIR
 
 */
 
-#ifndef ZServo_h
-#define ZServo_h
+#ifndef ZServoPCA9685_h
+#define ZServoPCA9685_h
 
 #define  ROS_USED 
 
@@ -29,33 +29,74 @@
 #include <std_msgs/UInt16.h>
 #endif 
 
-//#include <sensor_msgs/Range.h>
 
 
 class ZServoPCA9685
 {
 
 public:
-  ZServoPCA9685(ZPCA9685 * myZPCA9685) ;
-  uint8_t attach(int pin);           // attach the given pin to the next free channel, sets pinMode, returns channel number or 0 if failure
-  uint8_t attach(int pin, int min, int max); // as above but also sets min and max values for writes. 
+/** constructor of the class*/
+  ZServoPCA9685(ZPCA9685 * myZPCA9685 //!< the instance of ZPCA9685 driver associated to the board.
+  ) ;
+  /** @name API like Servo.h
+*/
+//@{
+  /** attach the given pin to the next free channel, sets pinMode, returns channel number or 0 if failure
+  */
+  uint8_t attach(int pin);           
+  /** as above but also sets min and max values for writes. 
+  */
+  uint8_t attach(int pin, int min, int max); 
   void detach();
-  void write(int value);             // if value is < 200 its treated as an angle, otherwise as pulse width in microseconds 
-  void writeMicroseconds(int value); // Write pulse width in microseconds 
-  int read();                        // returns current pulse width as an angle between 0 and 180 degrees
-  int readMicroseconds();            // returns current pulse width in microseconds for this servo (was read_us() in first release)
-  bool attached();                   // return true if this servo is attached, otherwise false 
-
+  /**if value is < 200 its treated as an angle, otherwise as pulse width in microseconds 
+  */
+  void write(int value);      
+	/** Write pulse width in microseconds 
+	*/  
+  void writeMicroseconds(int value); 
+  /** returns current pulse width as an angle between 0 and 180 degrees
+  */
+  int read();                       
+/**  returns current pulse width in microseconds for this servo (was read_us() in first release)
+*/  
+  int readMicroseconds();            
+  /** return true if this servo is attached, otherwise false 
+  */
+  bool attached();                   
+//@}
+  /** @name API for ROS
+*/
+//@{
 #ifdef ROS_USED 
-    void setup( ros::NodeHandle * myNodeHandle,	const char   *	topic ,void callbackinstance( const std_msgs::UInt16& cmd_msg),int pin);
-	void setup( ros::NodeHandle * myNodeHandle,	const char   *	topic ,int pin);
+/** the ros initialisation, it replace attach.
+
+note the ZPCA9685 must be initialised before.
+	*/
+    void setup( ros::NodeHandle * myNodeHandle //!< the ROS node handler
+	,const char   *	topic //!< the topic displayed in ROS
+	,void callbackinstance( const std_msgs::UInt16& cmd_msg)//!< the callback executed when a topic is recivied
+	,int pin //!< the generic pin number associated to the topic
+	);
+	/** the ros initialisation, it replace attach .
+	
+	note the ZPCA9685 must be initialised before.
+	*/
+	void setup( ros::NodeHandle * myNodeHandle//!< the ROS node handler
+	,	const char   *	topic //!< the topic displayed in ROS
+	,int pin//!< the generic pin number associated to the topic
+	);
+	/** function to be called in your main loop.
+	*/
 	void loop();
 #endif 
+//@}
   private:
+  
 #ifdef ROS_USED 
     ros::NodeHandle  *nh;    
     ros::Subscriber<std_msgs::UInt16> *subscriber;
 #endif
+	/** an instance of ZPCA9685 driver*/
 	ZPCA9685 * servo;
 	uint8_t index;
 };

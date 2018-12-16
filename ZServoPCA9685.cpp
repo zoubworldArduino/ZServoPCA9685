@@ -1,4 +1,4 @@
-/*
+/** @file ZServoPCA9685.cpp
 	ZServo
 
 	Arduino library for Servo
@@ -43,6 +43,7 @@ ZServoPCA9685::ZServoPCA9685(ZPCA9685 * myZPCA9685)
 	 DEBUG(nh->loginfo("ZServoPCA9685::attach1()"));  
 	// nh->subscribe(*subscriber);
 	index=pin;
+        servo->setPWMFreq(60);  // Analog servos run at ~60 Hz updates
 
 	 return servo->attach(pin);
  }
