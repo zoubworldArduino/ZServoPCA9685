@@ -35,7 +35,10 @@ ZServoPCA9685::ZServoPCA9685(ZPCA9685 * myZPCA9685)
 	
 	
 }
-
+ void ZServoPCA9685::setPulseRange( int min, int max) // as above but also sets min and max values for writes. 
+ {
+   servo->setPulseRange(index,min,max);
+ }
 
 // attach the given pin to the next free channel, sets pinMode, returns channel number or 0 if failure
  uint8_t ZServoPCA9685::attach(int pin)
@@ -205,7 +208,8 @@ void ZServoPCA9685::setup( ros::NodeHandle * myNodeHandle,	const char   *	topic 
   assert(index<16);
   nh=myNodeHandle;
   attach( pin);
-  subscriber=new ros::Subscriber<std_msgs::UInt16> (topic, callback[index]); 
+  subscriber=new ros::Subscriber<std_msgs::UInt16> (topic, callback[index]);
+  assert(subscriber!=0);
   myservo[index]=this;	
   nh->subscribe(*subscriber); 
   DEBUG(nh->loginfo("ZServoPCA9685::setup()"));
